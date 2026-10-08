@@ -1,0 +1,1242 @@
+#:kivy 2.0.0
+
+<RootScreenManager>:
+    SplashScreen:
+        name: "splash"
+    AuthScreen:
+        name: "auth"
+    HomeScreen:
+        name: "home"
+    CalendarScreen:
+        name: "calendar"
+    DailyLogScreen:
+        name: "log"
+    AnalyticsScreen:
+        name: "analytics"
+    SettingsScreen:
+        name: "settings"
+    ProfileScreen:
+        name: "profile"
+
+# ----------------- SPLASH SCREEN -----------------
+<SplashScreen>:
+    name: 'splash'
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (0.9, None)
+            height: self.minimum_height
+            pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+            spacing: dp(16)
+
+            # Logo Foto
+            Image:
+                source: 'assets/logo.png'
+                size_hint: (None, None)
+                size: (dp(240), dp(240))
+                pos_hint: {'center_x': 0.5}
+                allow_stretch: True
+                keep_ratio: True
+
+            # Slogan Aplikasi
+            Label:
+                text: 'Kenali siklusmu, nikmati harimu'
+                font_size: '14sp'
+                color: (0.45, 0.4, 0.42, 1)
+                size_hint_y: None
+                height: dp(26)
+
+        # Status Loading di Bagian Bawah
+        Label:
+            text: 'Memuat data kesehatan...'
+            font_size: '12sp'
+            color: (0.7, 0.65, 0.67, 1)
+            size_hint_y: None
+            height: dp(20)
+            pos_hint: {'center_x': 0.5, 'y': 0.05}
+
+# ----------------- AUTH SCREEN -----------------
+<AuthScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: [24, 20]
+        spacing: 12
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # Logo Aplikasi (Menggantikan Teks Zaraflow)
+        Image:
+            source: 'assets/logo.png'
+            size_hint: (None, None)
+            size: (dp(110), dp(110))
+            pos_hint: {'center_x': 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        BoxLayout:
+            size_hint_y: None
+            height: 40
+            spacing: 8
+            Button:
+                id: tab_login_btn
+                text: "Masuk"
+                bold: True
+                background_normal: ""
+                background_color: 0.91, 0.28, 0.46, 1
+                color: 1, 1, 1, 1
+                on_release: root.switch_tab("login")
+            Button:
+                id: tab_reg_btn
+                text: "Daftar Baru"
+                bold: True
+                background_normal: ""
+                background_color: 0.85, 0.85, 0.85, 1
+                color: 0.3, 0.3, 0.3, 1
+                on_release: root.switch_tab("register")
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+                padding: [0, 10]
+
+                Label:
+                    id: lbl_fullname
+                    text: "Nama Lengkap:"
+                    font_size: "12sp"
+                    color: 0.3, 0.3, 0.3, 1
+                    size_hint_y: None
+                    height: 18
+                    opacity: 0
+                    halign: "left"
+                    text_size: self.size
+                TextInput:
+                    id: input_fullname
+                    hint_text: "Nama Lengkap Anda"
+                    size_hint_y: None
+                    height: 44
+                    multiline: False
+                    opacity: 0
+                    disabled: True
+
+                Label:
+                    text: "Email Terdaftar:"
+                    font_size: "12sp"
+                    color: 0.3, 0.3, 0.3, 1
+                    size_hint_y: None
+                    height: 18
+                    halign: "left"
+                    text_size: self.size
+                TextInput:
+                    id: input_email
+                    hint_text: "nama@email.com"
+                    size_hint_y: None
+                    height: 44
+                    multiline: False
+
+                Label:
+                    text: "Kata Sandi:"
+                    font_size: "12sp"
+                    color: 0.3, 0.3, 0.3, 1
+                    size_hint_y: None
+                    height: 18
+                    halign: "left"
+                    text_size: self.size
+                TextInput:
+                    id: input_password
+                    hint_text: "Minimal 6 karakter"
+                    password: True
+                    size_hint_y: None
+                    height: 44
+                    multiline: False
+
+        Label:
+            id: auth_status_lbl
+            text: ""
+            font_size: "12sp"
+            color: 0.91, 0.28, 0.46, 1
+            size_hint_y: None
+            height: 28
+            halign: "center"
+            text_size: self.size
+
+        Button:
+            id: auth_submit_btn
+            text: "Masuk ke Akun"
+            size_hint_y: None
+            height: 48
+            background_normal: ""
+            background_color: 0.91, 0.28, 0.46, 1
+            bold: True
+            on_release: root.submit_auth()
+
+# ----------------- HOME SCREEN -----------------
+<HomeScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # Top Bar
+        BoxLayout:
+            size_hint_y: None
+            height: 56
+            padding: [20, 8]
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            # Teks Nama Sapaan (Statis / Non-Klik)
+            Label:
+                id: user_greeting_lbl
+                text: "[b]Halo Sahabat Zara[/b]"
+                markup: True
+                font_size: "18sp"
+                color: 0.91, 0.28, 0.46, 1
+                size_hint_x: 0.7
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+            Widget:
+                size_hint_x: 0.15
+
+            # Tombol Pengaturan
+            Button:
+                size_hint_x: 0.15
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                on_release: app.root.current = "settings"
+                canvas.after:
+                    Color:
+                        rgba: 0.35, 0.35, 0.35, 1
+                    RoundedRectangle:
+                        pos: self.center_x - 10, self.center_y + 6
+                        size: 20, 2.5
+                        radius: [1.5]
+                    RoundedRectangle:
+                        pos: self.center_x - 10, self.center_y - 1.25
+                        size: 20, 2.5
+                        radius: [1.5]
+                    RoundedRectangle:
+                        pos: self.center_x - 10, self.center_y - 8.5
+                        size: 20, 2.5
+                        radius: [1.5]
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: [16, 14]
+                spacing: 16
+
+                # HERO CYCLE WHEEL
+                FloatLayout:
+                    size_hint_y: None
+                    height: 250
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [24]
+                        Color:
+                            rgba: 0.97, 0.90, 0.93, 1
+                        Ellipse:
+                            pos: self.center_x - 95, self.center_y - 95
+                            size: 190, 190
+                        Color:
+                            rgba: 0.91, 0.28, 0.46, 1
+                        Ellipse:
+                            pos: self.center_x - 95, self.center_y - 95
+                            size: 190, 190
+                            angle_start: 0
+                            angle_end: root.cycle_angle
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Ellipse:
+                            pos: self.center_x - 76, self.center_y - 76
+                            size: 152, 152
+
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint: None, None
+                        size: 140, 95
+                        center: self.parent.center
+                        spacing: 2
+
+                        Label:
+                            id: cycle_day_lbl
+                            text: "Hari ke-1"
+                            font_size: "21sp"
+                            bold: True
+                            color: 0.91, 0.28, 0.46, 1
+                            size_hint_y: None
+                            height: 30
+                            halign: "center"
+                            valign: "middle"
+                            text_size: self.size
+
+                        Label:
+                            id: cycle_status_lbl
+                            text: "Fase Menstruasi\n5 hari lagi haid"
+                            font_size: "11sp"
+                            color: 0.45, 0.45, 0.45, 1
+                            halign: "center"
+                            valign: "middle"
+                            line_height: 1.15
+                            size_hint_y: None
+                            height: 48
+                            text_size: self.size
+
+                # WATER TRACKER CARD
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: 80
+                    padding: [16, 10]
+                    spacing: 12
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [16]
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_x: 0.7
+                        Label:
+                            text: "[b]Target Hidrasi Sehat[/b]"
+                            markup: True
+                            color: 0.2, 0.2, 0.2, 1
+                            font_size: "13sp"
+                            halign: "left"
+                            text_size: self.size
+                        Label:
+                            id: water_lbl
+                            text: "0 / 8 Gelas (0%)"
+                            color: 0.2, 0.6, 0.85, 1
+                            font_size: "12sp"
+                            bold: True
+                            halign: "left"
+                            text_size: self.size
+                    Button:
+                        text: "+ Minum"
+                        size_hint_x: 0.3
+                        background_normal: ""
+                        background_color: 0.2, 0.6, 0.85, 1
+                        bold: True
+                        on_release: root.add_water()
+
+                # STATUS FERTILITAS
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: 120
+                    padding: 16
+                    spacing: 6
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [16]
+                    Label:
+                        text: "[b]Estimasi Masa Subur & Ovulasi[/b]"
+                        markup: True
+                        color: 0.2, 0.2, 0.2, 1
+                        font_size: "14sp"
+                        size_hint_y: 0.3
+                        halign: "left"
+                        text_size: self.size
+                    Label:
+                        id: fertility_lbl
+                        text: "Menghitung proyeksi..."
+                        font_size: "12sp"
+                        color: 0.45, 0.45, 0.45, 1
+                        size_hint_y: 0.7
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+
+                # PESAN HARIAN (QUOTE TETAP)
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: 250
+                    padding: 16
+                    spacing: 8
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [16]
+                    Label:
+                        id: insight_title_lbl
+                        text: "[b]4 Fase Siklus Hormon dan Menstruasi[/b]"
+                        markup: True
+                        font_size: "14sp"
+                        color: 0.91, 0.28, 0.46, 1
+                        size_hint_y: None
+                        height: 24
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+                    Image:
+                        source: "assets/period_phase.png"
+                        size_hint_y: None
+                        height: 125
+                        allow_stretch: True
+                    Label:
+                        id: insight_desc_lbl
+                        text: '"Dengarkan tubuhmu, rawat dirimu, dan luangkan waktu untuk beristirahat."'
+                        font_size: "12sp"
+                        color: 0.35, 0.35, 0.35, 1
+                        halign: "center"
+                        valign: "middle"
+                        text_size: self.size
+
+        # BOTTOM DOCK (Navigasi Menu Utama)
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            padding: [10, 6]
+            spacing: 8
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Button:
+                text: "Beranda"
+                bold: True
+                color: 0.91, 0.28, 0.46, 1
+                background_normal: ""
+                background_color: 1, 1, 1, 1
+            Button:
+                text: "Kalender"
+                color: 0.45, 0.45, 0.45, 1
+                background_normal: ""
+                background_color: 1, 1, 1, 1
+                on_release: 
+                    app.root.current = "calendar"
+                    app.root.get_screen("calendar").generate_calendar()
+            Button:
+                text: "+ Catat"
+                bold: True
+                color: 1, 1, 1, 1
+                background_normal: ""
+                background_color: 0.91, 0.28, 0.46, 1
+                on_release: 
+                    app.root.current = "log"
+                    app.root.get_screen("log").load_today_log()
+            Button:
+                text: "Profil"
+                color: 0.45, 0.45, 0.45, 1
+                background_normal: ""
+                background_color: 1, 1, 1, 1
+                on_release: 
+                    app.root.current = "profile"
+
+# ----------------- PROFILE SCREEN (BARU) -----------------
+<ProfileScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: [18, 12]
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Label:
+            text: "Profil Saya"
+            font_size: "20sp"
+            bold: True
+            color: 0.91, 0.28, 0.46, 1
+            size_hint_y: None
+            height: 32
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 12
+
+                # KARTU INFO AKUN (Logo + Nama + Email)
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: 80
+                    padding: 12
+                    spacing: 12
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [14]
+
+                    Image:
+                        source: "assets/logo.png"
+                        size_hint: None, None
+                        size: 52, 52
+                        pos_hint: {"center_y": 0.5}
+
+                    BoxLayout:
+                        orientation: "vertical"
+                        spacing: 2
+                        pos_hint: {"center_y": 0.5}
+                        Label:
+                            id: profile_name_lbl
+                            text: "Memuat nama..."
+                            font_size: "16sp"
+                            bold: True
+                            color: 0.2, 0.2, 0.2, 1
+                            halign: "left"
+                            valign: "middle"
+                            text_size: self.size
+                        Label:
+                            id: profile_email_lbl
+                            text: "Memuat email..."
+                            font_size: "12sp"
+                            color: 0.5, 0.5, 0.5, 1
+                            halign: "left"
+                            valign: "middle"
+                            text_size: self.size
+
+                # FORM DATA DIRI
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: 185
+                    padding: 14
+                    spacing: 6
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [14]
+
+                    # NAMA LENGKAP
+                    Label:
+                        text: "[b]Masukkan Nama Lengkap[/b]"
+                        markup: True
+                        font_size: "12sp"
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: "left"
+                        size_hint_y: None
+                        height: 18
+                        text_size: self.size
+                    TextInput:
+                        id: edit_name_in
+                        multiline: False
+                        font_size: "13sp"
+                        size_hint_y: None
+                        height: 38
+
+                    # TANGGAL LAHIR
+                    Label:
+                        text: "[b]Tanggal Lahir (YYYY-MM-DD)[/b]"
+                        markup: True
+                        font_size: "12sp"
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: "left"
+                        size_hint_y: None
+                        height: 18
+                        text_size: self.size
+                    TextInput:
+                        id: birth_date_in
+                        hint_text: "Contoh: 2002-08-15"
+                        multiline: False
+                        font_size: "13sp"
+                        size_hint_y: None
+                        height: 38
+
+                    # TOMBOL SIMPAN
+                    Button:
+                        text: "Simpan Perubahan"
+                        size_hint_y: None
+                        height: 38
+                        background_normal: ""
+                        background_color: 0.91, 0.28, 0.46, 1
+                        color: 1, 1, 1, 1
+                        bold: True
+                        on_release: root.save_personal_info()
+
+                # STATUS INFORMASI
+                Label:
+                    id: profile_status_lbl
+                    text: ""
+                    font_size: "11sp"
+                    color: 0.2, 0.65, 0.4, 1
+                    size_hint_y: None
+                    height: 20
+                    halign: "center"
+                    text_size: self.size
+
+                # RINGKASAN SIKLUS
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: 105
+                    padding: 14
+                    spacing: 4
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [14]
+                    Label:
+                        text: "[b]Ringkasan Siklus[/b]"
+                        markup: True
+                        font_size: "13sp"
+                        color: 0.91, 0.28, 0.46, 1
+                        size_hint_y: None
+                        height: 20
+                        halign: "left"
+                        text_size: self.size
+                    Label:
+                        id: lbl_profile_stats
+                        text: "Memuat data parameter..."
+                        font_size: "11sp"
+                        color: 0.4, 0.4, 0.4, 1
+                        halign: "left"
+                        valign: "middle"
+                        line_height: 1.2
+                        text_size: self.size
+
+                # TOMBOL EKSPOR LAPORAN
+                Button:
+                    text: "Ekspor Laporan Kesehatan (TXT)"
+                    size_hint_y: None
+                    height: 40
+                    background_normal: ""
+                    background_color: 0.2, 0.6, 0.85, 1
+                    color: 1, 1, 1, 1
+                    bold: True
+                    on_release: root.download_report()
+
+        # TOMBOL AKSI BAWAH
+        Button:
+            text: "Keluar dari Akun (Logout)"
+            size_hint_y: None
+            height: 42
+            background_normal: ""
+            background_color: 0.85, 0.25, 0.25, 1
+            color: 1, 1, 1, 1
+            bold: True
+            on_release: root.logout()
+
+        Button:
+            text: "<- Kembali ke Beranda"
+            size_hint_y: None
+            height: 40
+            background_normal: ""
+            background_color: 0.6, 0.6, 0.6, 1
+            bold: True
+            on_release: app.root.current = "home"
+
+# ----------------- CALENDAR SCREEN -----------------
+<CalendarScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: [16, 12]
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # Navigasi Bulan (Header)
+        BoxLayout:
+            size_hint_y: None
+            height: 48
+            spacing: 10
+
+            Button:
+                text: "<"
+                size_hint_x: None
+                width: 48
+                background_normal: ""
+                background_color: 0.91, 0.28, 0.46, 1
+                color: 1, 1, 1, 1
+                bold: True
+                font_size: "18sp"
+                on_release: root.prev_month()
+
+            Label:
+                id: month_header
+                text: "September 2026"
+                bold: True
+                font_size: "18sp"
+                color: 0.2, 0.2, 0.2, 1
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+            Button:
+                text: ">"
+                size_hint_x: None
+                width: 48
+                background_normal: ""
+                background_color: 0.91, 0.28, 0.46, 1
+                color: 1, 1, 1, 1
+                bold: True
+                font_size: "18sp"
+                on_release: root.next_month()
+
+        # Legenda Warna Indikator
+        BoxLayout:
+            size_hint_y: None
+            height: 24
+            Label:
+                text: "HAID"
+                color: 0.91, 0.28, 0.46, 1
+                font_size: "11sp"
+                bold: True
+            Label:
+                text: "SUBUR"
+                color: 0.2, 0.6, 0.85, 1
+                font_size: "11sp"
+                bold: True
+            Label:
+                text: "OVULASI"
+                color: 0.95, 0.6, 0.1, 1
+                font_size: "11sp"
+                bold: True
+
+        # Header Hari (Min - Sab)
+        GridLayout:
+            cols: 7
+            size_hint_y: None
+            height: 28
+            Label:
+                text: "Min"
+                font_size: "11sp"
+                bold: True
+                color: 0.91, 0.28, 0.46, 1
+            Label:
+                text: "Sen"
+                font_size: "11sp"
+                color: 0.4, 0.4, 0.4, 1
+            Label:
+                text: "Sel"
+                font_size: "11sp"
+                color: 0.4, 0.4, 0.4, 1
+            Label:
+                text: "Rab"
+                font_size: "11sp"
+                color: 0.4, 0.4, 0.4, 1
+            Label:
+                text: "Kam"
+                font_size: "11sp"
+                color: 0.4, 0.4, 0.4, 1
+            Label:
+                text: "Jum"
+                font_size: "11sp"
+                color: 0.4, 0.4, 0.4, 1
+            Label:
+                text: "Sab"
+                font_size: "11sp"
+                color: 0.4, 0.4, 0.4, 1
+
+        # Grid Kotak Tanggal
+        GridLayout:
+            id: calendar_grid
+            cols: 7
+            spacing: 4
+
+        # Keterangan Feedback Klik
+        Label:
+            id: cal_feedback_lbl
+            text: "Ketuk tanggal untuk menandai atau membatalkan haid."
+            font_size: "11sp"
+            color: 0.4, 0.4, 0.4, 1
+            size_hint_y: None
+            height: 24
+            halign: "center"
+            text_size: self.size
+
+        # Tombol Kembali
+        Button:
+            text: "<- Kembali ke Beranda"
+            size_hint_y: None
+            height: 42
+            background_normal: ""
+            background_color: 0.91, 0.28, 0.46, 1
+            color: 1, 1, 1, 1
+            bold: True
+            on_release: app.root.current = "home"
+            
+# ----------------- DAILY LOG SCREEN -----------------
+<DailyLogScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: [dp(18), dp(14)]
+        spacing: dp(10)
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Label:
+            text: "Catatan Harian Kondisi Tubuh"
+            font_size: "18sp"
+            bold: True
+            color: 0.91, 0.28, 0.46, 1
+            size_hint_y: None
+            height: dp(36)
+
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(14)
+                padding: [0, dp(6)]
+
+                # SECTION ALIRAN DARAH
+                Label:
+                    text: "[b]Intensitas Aliran Darah[/b]"
+                    markup: True
+                    color: 0.2, 0.2, 0.2, 1
+                    font_size: "13sp"
+                    size_hint_y: None
+                    height: dp(24)
+                    halign: "left"
+                    text_size: self.size
+
+                GridLayout:
+                    cols: 4
+                    size_hint_y: None
+                    height: dp(42)
+                    spacing: dp(6)
+                    Button:
+                        id: btn_flow_tidak
+                        text: "Tidak Ada"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.91, 0.28, 0.46, 1
+                        on_release: root.set_flow("Tidak Ada")
+                    Button:
+                        id: btn_flow_flek
+                        text: "Flek"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_flow("Flek")
+                    Button:
+                        id: btn_flow_sedang
+                        text: "Sedang"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_flow("Sedang")
+                    Button:
+                        id: btn_flow_deras
+                        text: "Deras"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_flow("Deras")
+
+                # SECTION MOOD
+                Label:
+                    text: "[b]Suasana Hati (Mood)[/b]"
+                    markup: True
+                    color: 0.2, 0.2, 0.2, 1
+                    font_size: "13sp"
+                    size_hint_y: None
+                    height: dp(24)
+                    halign: "left"
+                    text_size: self.size
+
+                GridLayout:
+                    cols: 3
+                    size_hint_y: None
+                    height: dp(42)
+                    spacing: dp(6)
+                    Button:
+                        id: btn_mood_bahagia
+                        text: "Bahagia"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.91, 0.28, 0.46, 1
+                        on_release: root.set_mood("Bahagia")
+                    Button:
+                        id: btn_mood_sensitif
+                        text: "Sensitif"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_mood("Sensitif")
+                    Button:
+                        id: btn_mood_lelah
+                        text: "Lelah"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_mood("Lelah")
+
+                # SECTION GEJALA FISIK
+                Label:
+                    text: "[b]Gejala Fisik Spesifik[/b]"
+                    markup: True
+                    color: 0.2, 0.2, 0.2, 1
+                    font_size: "13sp"
+                    size_hint_y: None
+                    height: dp(24)
+                    halign: "left"
+                    text_size: self.size
+
+                GridLayout:
+                    cols: 2
+                    size_hint_y: None
+                    height: dp(90)
+                    spacing: dp(6)
+                    Button:
+                        id: btn_sym_kram
+                        text: "Kram Perut"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_symptom("Kram Perut")
+                    Button:
+                        id: btn_sym_pusing
+                        text: "Sakit Kepala"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_symptom("Sakit Kepala")
+                    Button:
+                        id: btn_sym_jerawat
+                        text: "Jerawat"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.8, 0.8, 0.8, 1
+                        on_release: root.set_symptom("Jerawat")
+                    Button:
+                        id: btn_sym_nihil
+                        text: "Tidak Ada Gejala"
+                        font_size: "11sp"
+                        background_normal: ""
+                        background_color: 0.91, 0.28, 0.46, 1
+                        on_release: root.set_symptom("Nihil")
+
+        # STATUS SIMPAN / PILIHAN
+        Label:
+            id: log_status_lbl
+            text: "Pilih status kondisi lalu simpan."
+            color: 0.45, 0.42, 0.44, 1
+            font_size: "11sp"
+            size_hint_y: None
+            height: dp(24)
+            halign: "center"
+            text_size: self.size
+
+        # TOMBOL AKSI
+        Button:
+            text: "Simpan Log Hari Ini"
+            size_hint_y: None
+            height: dp(46)
+            background_normal: ""
+            background_color: 0.91, 0.28, 0.46, 1
+            color: 1, 1, 1, 1
+            bold: True
+            on_release: root.save_log()
+
+        Button:
+            text: "<- Kembali ke Beranda"
+            size_hint_y: None
+            height: dp(40)
+            background_normal: ""
+            background_color: 0.6, 0.58, 0.6, 1
+            color: 1, 1, 1, 1
+            bold: True
+            on_release: app.root.current = "home"
+
+# ----------------- ANALYTICS SCREEN -----------------
+<AnalyticsScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 16
+        spacing: 12
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Label:
+            text: "Analisis Siklus & Pola Medis"
+            font_size: "18sp"
+            bold: True
+            color: 0.91, 0.28, 0.46, 1
+            size_hint_y: None
+            height: 40
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: 120
+            padding: 14
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [16]
+            Label:
+                text: "[b]Statistik Keteraturan Hormonal[/b]"
+                markup: True
+                color: 0.2, 0.2, 0.2, 1
+                size_hint_y: 0.3
+                halign: "left"
+                text_size: self.size
+            Label:
+                id: stats_lbl
+                text: "Rata-rata Siklus: 28 Hari\nVariasi Siklus: Stabil (±1 Hari)\nDurasi Haid: 5 Hari"
+                color: 0.4, 0.4, 0.4, 1
+                font_size: "12sp"
+                size_hint_y: 0.7
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+        BoxLayout:
+            size_hint_y: None
+            height: 36
+            Label:
+                text: "Riwayat Siklus"
+                font_size: "14sp"
+                bold: True
+                color: 0.3, 0.3, 0.3, 1
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+            Button:
+                text: "Export Laporan (.txt)"
+                size_hint_x: None
+                width: 150
+                background_normal: ""
+                background_color: 0.2, 0.65, 0.4, 1
+                bold: True
+                font_size: "11sp"
+                on_release: root.export_report()
+
+        ScrollView:
+            BoxLayout:
+                id: history_container
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 8
+
+        Button:
+            text: "<- Kembali ke Beranda"
+            size_hint_y: None
+            height: 46
+            background_normal: ""
+            background_color: 0.91, 0.28, 0.46, 1
+            bold: True
+            on_release: app.root.current = "home"
+
+# ----------------- SETTINGS SCREEN -----------------
+<SettingsScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.96, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Label:
+            text: "Pengaturan Parameter Siklus"
+            font_size: "18sp"
+            bold: True
+            color: 0.91, 0.28, 0.46, 1
+            size_hint_y: None
+            height: 36
+
+        Label:
+            id: user_email_lbl
+            text: "Akun: memuat..."
+            font_size: "12sp"
+            color: 0.5, 0.5, 0.5, 1
+            size_hint_y: None
+            height: 20
+            halign: "left"
+            text_size: self.size
+
+        Label:
+            text: "Tanggal Mulai Haid Terakhir:"
+            font_size: "12sp"
+            color: 0.3, 0.3, 0.3, 1
+            size_hint_y: None
+            height: 18
+            halign: "left"
+            text_size: self.size
+
+        BoxLayout:
+            size_hint_y: None
+            height: 44
+            spacing: 8
+            TextInput:
+                id: last_date_in
+                hint_text: "YYYY-MM-DD"
+                multiline: False
+                size_hint_x: 0.65
+            Button:
+                text: "Pilih Kalender"
+                size_hint_x: 0.35
+                background_normal: ""
+                background_color: 0.2, 0.6, 0.85, 1
+                font_size: "11sp"
+                bold: True
+                on_release: root.open_date_picker()
+
+        Label:
+            text: "Rata-rata Durasi Siklus (Hari):"
+            font_size: "12sp"
+            color: 0.3, 0.3, 0.3, 1
+            size_hint_y: None
+            height: 18
+            halign: "left"
+            text_size: self.size
+
+        TextInput:
+            id: cycle_in
+            hint_text: "28"
+            size_hint_y: None
+            height: 44
+            multiline: False
+            input_filter: "int"
+
+        Label:
+            text: "Lama Haid Berlangsung (Hari):"
+            font_size: "12sp"
+            color: 0.3, 0.3, 0.3, 1
+            size_hint_y: None
+            height: 18
+            halign: "left"
+            text_size: self.size
+
+        TextInput:
+            id: dur_in
+            hint_text: "5"
+            size_hint_y: None
+            height: 44
+            multiline: False
+            input_filter: "int"
+
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 48
+            padding: [12, 4]
+            spacing: 8
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10]
+            Label:
+                text: "Notifikasi Pengingat"
+                font_size: "12sp"
+                color: 0.2, 0.2, 0.2, 1
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+            Switch:
+                id: notif_toggle_switch
+                active: True
+                size_hint_x: None
+                width: 60
+            Button:
+                id: notif_test_btn
+                text: "Tes"
+                size_hint_x: None
+                width: 65
+                background_normal: ""
+                background_color: 0.91, 0.28, 0.46, 1
+                font_size: "11sp"
+                bold: True
+                on_release: root.trigger_manual_notification()
+
+        Label:
+            id: info_msg
+            text: ""
+            color: 0.91, 0.28, 0.46, 1
+            font_size: "12sp"
+            size_hint_y: None
+            height: 24
+
+        Button:
+            text: "Simpan Parameter Siklus"
+            size_hint_y: None
+            height: 46
+            background_normal: ""
+            background_color: 0.91, 0.28, 0.46, 1
+            bold: True
+            on_release: root.save_settings()
+
+        Button:
+            text: "Kembali"
+            size_hint_y: None
+            height: 38
+            background_normal: ""
+            background_color: 0.6, 0.6, 0.6, 1
+            on_release: app.root.current = "home"

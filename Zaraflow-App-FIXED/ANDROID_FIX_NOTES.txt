@@ -1,0 +1,19 @@
+ZaraFlow Android Fix
+====================
+
+This package contains the targeted runtime fixes:
+- SQLite is stored in the writable Kivy application user_data_dir on Android.
+- Database schema migration for users.birth_date is handled during init_db().
+- Direct SQLite access in main.py uses the shared Android-safe connection helper.
+- TXT reports are saved to the application's writable user_data_dir.
+- Buildozer configuration explicitly targets ARM64 and includes notification permission.
+
+IMPORTANT:
+The original ZIP did not contain assets/logo.png or assets/period_phase.png even though
+zaraflow.kv references them. Those original image assets were not fabricated or replaced
+to preserve the supplied UI design. Add the original assets under:
+  assets/logo.png
+  assets/period_phase.png
+
+The missing images should be treated as a packaging/source completeness issue, separate
+from the SQLite runtime fix.
